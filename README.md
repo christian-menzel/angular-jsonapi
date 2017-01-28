@@ -28,164 +28,188 @@ Retrieving a collection is simple:
 })();
 ```
 
-the json:api server might respond with :
+the json:api server may respond with :
 ```json
 {
-  "links": {
-    "self": "http://example.com/books"
-  },
-  "data": [
-    {
-      "id": "1",
-      "type": "book",
-      "attributes": {
-        "title": "Dune"
-      }, "relationships": {
-        "author": {
-          "links": {
-            "self": "http://example.com/books/1/relationships/author",
-            "related": "http://example.com/books/1/author"
-          },
-          "data": {
+    "data": [
+        {
             "id": "1",
-            "type": "people"
-          }
-        },
-        "stores": {
-          "links": {
-            "self": "http://example.com/books/1/relationships/stores",
-            "related": "http://example.com/books/1/stores"
-          },
-          "data": [
-            {
-              "id": "1",
-              "type": "store"
+            "type": "books",
+            "attributes": {
+                "date_published": "1954-07-29",
+                "title": "The Fellowship of the Ring",
+                "created_at": "2017-01-28 11:01:24",
+                "updated_at": "2017-01-28 11:01:24"
             },
-            {
-              "id": "2",
-              "type": "store"
+            "relationships": {
+                "author": {
+                    "links": {
+                        "self": "/v1/books/1/relationships/author",
+                        "related": "/v1/books/1/author"
+                    },
+                    "data": {
+                        "id": "1",
+                        "type": "authors"
+                    }
+                },
+                "stores": {
+                    "links": {
+                        "self": "/v1/books/1/relationships/stores",
+                        "related": "/v1/books/1/stores"
+                    },
+                    "data": [{
+                            "id": "2",
+                            "type": "stores"
+                        }]
+                }
+            },
+            "links": {
+                "self": "/v1/books/1"
             }
-          ]
+        }, {
+            "id": "2",
+            "type": "books",
+            "attributes": {
+                "date_published": "1954-11-11",
+                "title": "The Two Towers",
+                "created_at": "2017-01-28 11:01:24",
+                "updated_at": "2017-01-28 11:01:24"
+            },
+            "relationships": {
+                "author": {
+                    "links": {
+                        "self": "/v1/books/2/relationships/author",
+                        "related": "/v1/books/2/author"
+                    },
+                    "data": {
+                        "id": "1",
+                        "type": "authors"
+                    }
+                },
+                "stores": {
+                    "links": {
+                        "self": "/v1/books/2/relationships/stores",
+                        "related": "/v1/books/2/stores"
+                    },
+                    "data": [{
+                            "id": "2",
+                            "type": "stores"
+                        }]
+                }
+            },
+            "links": {
+                "self": "/v1/books/2"
+            }
         }
-      },
-      "links": {
-        "self": "http://example.com/books/1"
-      }
-    }, {
-      "id": "2",
-      "type": "book",
-      "attributes": {
-        "title": "Dune - Messiah"
-      },
-      "relationships": {
-        "author": {
-          "links": {
-            "self": "http://example.com/books/2/relationships/author",
-            "related": "http://example.com/books/2/author"
-          },
-          "data": {
+    ],
+    "included": [
+        {
             "id": "1",
-            "type": "people"
-          }
-        },
-        "stores": {
-          "links": {
-            "self": "http://example.com/books/2/relationships/stores",
-            "related": "http://example.com/books/2/stores"
-          },
-          "data": [
-            { 
-              "id": "2",
-              "type": "store"
+            "type": "authors",
+            "attributes": {
+                "name": "J. R. R. Tolkien",
+                "date_of_birth": "1892-01-03",
+                "date_of_death": "1973-09-02",
+                "created_at": "2017-01-28 11:01:24",
+                "updated_at": "2017-01-28 11:01:24"
+            },
+            "relationships": {
+                "books": {
+                    "links": {
+                        "self": "/v1/books/1/relationships/books",
+                        "related": "/v1/books/1/books"
+                    }
+                }
+            },
+            "links": {
+                "self": "/v1/books/1"
             }
-          ]
+        }, {
+            "id": "2",
+            "type": "stores",
+            "attributes": {
+                "name": "full store",
+                "created_at": "2017-01-28 11:01:29",
+                "updated_at": "2017-01-28 11:01:29"
+            },
+            "relationships": {
+                "books": {
+                    "links": {
+                        "self": "/v1/books/2/relationships/books",
+                        "related": "/v1/books/2/books"
+                    }
+                }
+            },
+            "links": {
+                "self": "/v1/books/2"
+            }
         }
-      },
-      "links": {
-        "self": "http://example.com/books/2"
-      }
-    }
-  ],
-  "included": [
-    {
-      "data": {
-        "id": "1",
-        "type": "people",
-        "attributes": {
-          "first-name": "Frank",
-          "last-name": "Herbert"
-        }
-      },
-      "links": {
-        "self": "http://example.com/people/1"
-      }
-    }, {
-      "data": {
-        "id": "1",
-        "type": "store",
-        "attributes": {
-          "name": "Example Store",
-          "Location": "New York City"
-        }
-      },
-      "links": {
-        "self": "http://example.com/stores/1"
-      }
-    }, {
-      "data": {
-        "id": "2",
-        "type": "store",
-        "attributes": {
-          "name": "Demo Store",
-          "Location": "San Francisco"
-        }
-      },
-      "links": {
-        "self": "http://example.com/stores/2"
-      }
-    }
-  ]
+    ]
 }
 ```
-Parsed book collection:
+angular-jsonapi provided hierarchical collection:
 ```json
 [
   {
     "id": "1",
-    "title": "Dune",
+    "date_published": "1954-07-29",
+    "title": "The Fellowship of the Ring",
+    "created_at": "2017-01-28 11:01:24",
+    "updated_at": "2017-01-28 11:01:24"
     "author": {
       "id": "1",
-      "first-name": "Frank",
-      "last-name": "Herbert"
+      "name": "J. R. R. Tolkien",
+      "date_of_birth": "1892-01-03",
+      "date_of_death": "1973-09-02",
+      "created_at": "2017-01-28 11:01:24",
+      "updated_at": "2017-01-28 11:01:24"
     },
     "stores": [
       {
-        "id": "1",
-        "name": "Example Store",
-        "location": "New York City"
-      }, {
         "id": "2",
-        "name": "Demo Store",
-        "location": "San Francisco"
+        "name": "full store",
+        "created_at": "2017-01-28 11:01:29",
+        "updated_at": "2017-01-28 11:01:29"
       }
     ]
   }, {
     "id": "2",
-    "title": "Dune - Messiah",
+    "date_published": "1954-11-11",
+    "title": "The Two Towers",
+    "created_at": "2017-01-28 11:01:24",
+    "updated_at": "2017-01-28 11:01:24",
     "author": {
       "id": "1",
-      "first-name": "Frank",
-      "last-name": "Herbert"
+      "name": "J. R. R. Tolkien",
+      "date_of_birth": "1892-01-03",
+      "date_of_death": "1973-09-02",
+      "created_at": "2017-01-28 11:01:24",
+      "updated_at": "2017-01-28 11:01:24"
     },
     "stores": [
       {
         "id": "2",
-        "name": "Demo Store",
-        "location": "San Francisco"
+        "name": "full store",
+        "created_at": "2017-01-28 11:01:29",
+        "updated_at": "2017-01-28 11:01:29"
       }
     ]
   }
 ]
 ```
-
-The information to read,patch,put and delete resources remain in the repository
+Accessing the object through angular directives is as easy as:
+```html
+<div ng-repeat="book in vm.getBooks()">
+  <h2>{{ book.title }}</h2>
+  <p>by {{ book.author.name }}</p>
+  <p>
+    Grab your copy here:
+    <ul>
+      <li ng-repeat="store in book.stores">
+        {{ store.name }}
+      </li>
+    </ul>
+  </p>
+</div>
+```
+The information about how to read,patch,put and delete resources remains in the repository
