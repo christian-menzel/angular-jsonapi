@@ -151,13 +151,11 @@ angular-jsonapi provided hierarchical collection:
 ```json
 [
   {
-    "id": "1",
     "date_published": "1954-07-29",
     "title": "The Fellowship of the Ring",
     "created_at": "2017-01-28 11:01:24",
     "updated_at": "2017-01-28 11:01:24"
     "author": {
-      "id": "1",
       "name": "J. R. R. Tolkien",
       "date_of_birth": "1892-01-03",
       "date_of_death": "1973-09-02",
@@ -166,20 +164,17 @@ angular-jsonapi provided hierarchical collection:
     },
     "stores": [
       {
-        "id": "2",
         "name": "full store",
         "created_at": "2017-01-28 11:01:29",
         "updated_at": "2017-01-28 11:01:29"
       }
     ]
   }, {
-    "id": "2",
     "date_published": "1954-11-11",
     "title": "The Two Towers",
     "created_at": "2017-01-28 11:01:24",
     "updated_at": "2017-01-28 11:01:24",
     "author": {
-      "id": "1",
       "name": "J. R. R. Tolkien",
       "date_of_birth": "1892-01-03",
       "date_of_death": "1973-09-02",
@@ -188,7 +183,6 @@ angular-jsonapi provided hierarchical collection:
     },
     "stores": [
       {
-        "id": "2",
         "name": "full store",
         "created_at": "2017-01-28 11:01:29",
         "updated_at": "2017-01-28 11:01:29"
