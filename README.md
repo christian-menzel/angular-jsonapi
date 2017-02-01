@@ -154,7 +154,7 @@ angular-jsonapi provided hierarchical collection:
     "date_published": "1954-07-29",
     "title": "The Fellowship of the Ring",
     "created_at": "2017-01-28 11:01:24",
-    "updated_at": "2017-01-28 11:01:24"
+    "updated_at": "2017-01-28 11:01:24",
     "author": {
       "name": "J. R. R. Tolkien",
       "date_of_birth": "1892-01-03",
