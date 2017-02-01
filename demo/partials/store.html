@@ -1,0 +1,10 @@
+<div ng-show="vm.store">
+    <h2>{{ vm.store.name }}</h2>
+    Sells the following books:
+    <ul>
+        <li ng-repeat="book in vm.store.books">
+            <a href ng-click="main.showBook(book)">{{ book.title }}</a> by
+            <a href ng-click="main.showAuthor(book)">{{ book.author.name }}</a>
+        </li>
+    </ul>
+</div>

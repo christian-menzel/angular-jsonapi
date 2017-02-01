@@ -1,0 +1,8 @@
+<div ng-show="vm.stores">
+    <h2>List of stores</h2>
+    <ul>
+        <li ng-repeat="store in vm.stores">
+            <a href ng-click="main.showStore(store)">{{ store.name }}</a>
+        </li>
+    </ul>
+</div>

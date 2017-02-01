@@ -1,0 +1,38 @@
+{
+  "name": "angular-jsonapi",
+  "version": "0.1.0",
+  "description": "json:api wrapper for the angular framework",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://christian-menzel@github.com/christian-menzel/angular-jsonapi.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/christian-menzel/angular-jsonapi/issues"
+  },
+  "homepage": "https://github.com/christian-menzel/angular-jsonapi#readme",
+  "devDependencies": {
+    "angular-mocks": "^1.6.1",
+    "eslint": "^3.14.1",
+    "eslint-config-angular": "^0.5.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-angular": "^1.6.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.4.1",
+    "karma-htmlfile-reporter": "^0.3.5",
+    "karma-jasmine": "^1.1.0",
+    "karma-webdriver-launcher": "^1.0.5",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "angular": "^1.6.1"
+  }
+}

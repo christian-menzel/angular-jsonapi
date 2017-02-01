@@ -1,0 +1,13 @@
+{
+    "predef": [
+      "angular",
+      "describe",
+      "beforeEach"
+    ],
+    "devel": false,
+    "indent": 2,
+    "esversion": 6,
+    "quotmark": "single",
+    "newcap": true,
+    "unused": true
+}

@@ -1,0 +1,8 @@
+<div ng-show="vm.author">
+    <h2>{{ vm.author.name }}</h2>
+    <ul>
+        <li ng-repeat="book in vm.author.books">
+            <a href ng-click="main.showBook(book)">{{ book.title }}</a>
+        </li>
+    </ul>
+</div>
