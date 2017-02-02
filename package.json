@@ -2,9 +2,9 @@
   "name": "angular-jsonapi",
   "version": "0.1.0",
   "description": "json:api wrapper for the angular framework",
-  "main": "src/index.js",
+  "main": "dist/angular-jsonapi.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start --singleRun"
   },
   "repository": {
     "type": "git",

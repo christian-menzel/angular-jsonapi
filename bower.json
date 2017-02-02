@@ -1,0 +1,19 @@
+{
+  "version": "0.1.0",
+  "name": "angular-jsonapi",
+  "description": "json:api wrapper for the angular framework",
+  "main": "dist/angular-jsonapi.min.js",
+  "license": "MIT",
+  "homepage": "https://github.com/christian-menzel/angular-jsonapi",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "demo",
+    "docker-compose.yml",
+  ],
+  "dependencies": {
+    "angular": "^1.6.1"
+  }
+}
