@@ -9,6 +9,7 @@
     "**/.*",
     "node_modules",
     "bower_components",
+    "nbproject",
     "test",
     "demo",
     "docker-compose.yml"
