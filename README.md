@@ -18,7 +18,8 @@ Retrieving a collection is simple:
     
     function getBooks() {
       // calling the service for http://example.com/books
-      repository.find("/books", {
+      var repository = JsonApi.repository('http://example.com/books');
+      repository.fetch({
         "included": ["author", "stores"]
       }).then(function(books) {
         return books;
