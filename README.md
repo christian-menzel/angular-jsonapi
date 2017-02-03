@@ -7,7 +7,7 @@ angular-jsonapi provides an easy way to talk to json:api restful services and de
 Retrieving a collection is simple:
 ``` javascript 
 (function() {
-  angular.module("myApp", [Jsonapi])
+  angular.module("myApp", [JsonApi])
   .controller("myController", function(jsonapi) {
     vm = this
     
