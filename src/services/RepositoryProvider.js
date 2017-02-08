@@ -9,19 +9,23 @@
     };
     return provider;
 
-    function create(path) {
+    function create(path, schema) {
       var _path = path;
+      var _schema = schema;
 
       var repository = {
-        fetch: fetch
+        fetch: fetch,
+        add: add,
+        remove: remove
       };
 
-      activate(path);
+      activate(path, schema);
 
       return repository;
 
       function activate() {
         _path = path;
+        _schema = schema;
       }
 
       /* public */
@@ -29,6 +33,21 @@
       function fetch(options) {
         return _findResource(_path, options).then(function(resource) {
           return _parse(resource);
+        });
+      }
+      
+      function add(data) {
+        var resource = _createResource(data, _schema);
+        return $http.post(_path, resource)
+        .then(function(response) {
+          return response;
+        })
+      }
+      
+      function remove(id) {
+        return $http.delete(_path + '/' + id)
+        .then(function(response) {
+          return response;
         });
       }
 
@@ -74,6 +93,36 @@
           collection.push(_parseItem(resource));
         });
         return collection;
+      }
+      
+      function _createResource(data, schema) {        
+        var resource = {
+          data: {
+            type: schema.type,
+            attributes: {},
+            relationships: {}
+          }
+        }
+        
+        angular.forEach(schema.attributes, function(attribute) {
+//          if (data[attribute] === true || data[attribute] === false) {
+//            resource.data.attributes[attribute] = "true";
+//          }
+//          else {
+//            resource.data.attributes[attribute] = data[attribute];
+//          }
+          resource.data.attributes[attribute] = data[attribute];
+        });
+        
+        angular.forEach(schema.relationships, function(relation) {
+          resource.data.relationships[relation.name] = {
+            data: {
+              type: ""//relation.schema.type
+            }
+          }
+        });
+        
+        return resource;
       }
     }
   }

@@ -68,23 +68,20 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 (function() {
+  'use strict';
   angular.module('JsonApi', []);
 }());
 
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 (function() {
+  'use strict';
   angular.module('JsonApi')
     .factory('ItemProvider', ['JsonApiCache', ItemProvider]);
 
@@ -152,11 +149,10 @@
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 (function() {
+  'use strict';
   angular.module('JsonApi')
     .factory('JsonApi', ['RepositoryProvider', 'JsonApiCache', JsonApi]);
 
@@ -169,8 +165,8 @@
 
     /* public */
 
-    function repository(path) {
-      return RepositoryProvider.create(path);
+    function repository(path,schema) {
+      return RepositoryProvider.create(path,schema);
     }
 
     function repositoryFromItem(item) {
@@ -183,11 +179,10 @@
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 (function() {
+  'use strict';
   angular.module('JsonApi')
     .factory('JsonApiCache', JsonApiCache);
 
@@ -207,7 +202,7 @@
     /* public */
 
     function addItem(item) {
-      var storedItem = this.getItem(item.type(), item.id());
+      var storedItem = getItem(item.type(), item.id());
       _items[item.type()][item.id()] = angular.extend(storedItem, item);
     }
 
@@ -236,13 +231,13 @@
 
     function getResponsibility(item) {
       if (angular.isUndefined(item)) {
-        throw 'required parameter item missing';
+        throw new Error('Missing Parameter', 'Required parameter item missing.');
       }
       if (!angular.isFunction(item.id)) {
-        throw 'the item must have the required functions id() and type()';
+        throw new Error('Missing required Method', 'Required Method item.id() is missing.');
       }
       if (!angular.isFunction(item.type)) {
-        throw 'the item must have the required functions id() and type()';
+        throw new Error('Missing required Method', 'Required Method item.type() is missing.');
       }
       if (angular.isUndefined(_responsibilities)) {
         return null;
@@ -261,11 +256,10 @@
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 (function() {
+  'use strict';
   angular.module('JsonApi')
     .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', RepositoryProvider]);
 
@@ -275,19 +269,23 @@
     };
     return provider;
 
-    function create(path) {
+    function create(path, schema) {
       var _path = path;
+      var _schema = schema;
 
       var repository = {
-        fetch: fetch
+        fetch: fetch,
+        add: add,
+        remove: remove
       };
 
-      activate(path);
+      activate(path, schema);
 
       return repository;
 
       function activate() {
         _path = path;
+        _schema = schema;
       }
 
       /* public */
@@ -295,6 +293,22 @@
       function fetch(options) {
         return _findResource(_path, options).then(function(resource) {
           return _parse(resource);
+        });
+      }
+      
+      function add(data) {
+        var resource = _createResource(data, _schema);
+        console.log(resource);
+        return $http.post(_path, resource)
+        .then(function(response) {
+          return response;
+        })
+      }
+      
+      function remove(id) {
+        return $http.delete(_path + '/' + id)
+        .then(function(response) {
+          return response;
         });
       }
 
@@ -340,6 +354,36 @@
           collection.push(_parseItem(resource));
         });
         return collection;
+      }
+      
+      function _createResource(data, schema) {        
+        var resource = {
+          data: {
+            type: schema.type,
+            attributes: {},
+            relationships: {}
+          }
+        }
+        
+        angular.forEach(schema.attributes, function(attribute) {
+          if (data[attribute] === true || data[attribute] === false) {
+            resource.data.attributes[attribute] = "true";
+          }
+          else {
+            resource.data.attributes[attribute] = data[attribute];
+          }
+          //resource.data.attributes[attribute] = data[attribute];
+        });
+        
+        angular.forEach(schema.relationships, function(relation) {
+          resource.data.relationships[relation.name] = {
+            data: {
+              type: ""//relation.schema.type
+            }
+          }
+        });
+        
+        return resource;
       }
     }
   }

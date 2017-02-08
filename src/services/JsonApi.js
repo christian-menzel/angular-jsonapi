@@ -12,8 +12,8 @@
 
     /* public */
 
-    function repository(path) {
-      return RepositoryProvider.create(path);
+    function repository(path,schema) {
+      return RepositoryProvider.create(path,schema);
     }
 
     function repositoryFromItem(item) {
