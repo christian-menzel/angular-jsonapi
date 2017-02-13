@@ -300,11 +300,14 @@
       
       function add(data) {
         var resource = _createResource(data, _schema);
-                        
+        console.log('resource');
+        console.log(resource);
         return $http.post(_path, resource)
         .then(function(response) {
-          return response;
-        })
+          return _parse(response.data);
+        }, function(response) {
+          return _parse(response.data);
+        });
       }
       
       function addRelationships(data) {
@@ -396,7 +399,6 @@
         };
         
         resource.data = _createData(data, schema);
-                
         return resource;
       }
       
@@ -430,9 +432,12 @@
           angular.forEach(schema.relationships, function(relation) {
             data.relationships[relation.name] = {
               data: {
-                type: "" //relation.schema.type,
+                type: relation.schema.type
               }
             };
+            if(angular.isDefined(item[relation.name]) && angular.isDefined(item[relation.name].id)){
+              data.relationships[relation.name].data['id'] = item[relation.name].id(); 
+            }
           });
           return data;
         }
