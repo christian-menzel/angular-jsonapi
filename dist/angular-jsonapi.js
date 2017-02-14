@@ -261,9 +261,9 @@
 (function() {
   'use strict';
   angular.module('JsonApi')
-    .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', RepositoryProvider]);
+    .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', '$filter', RepositoryProvider]);
 
-  function RepositoryProvider($http, JsonApiCache, ItemProvider) {
+  function RepositoryProvider($http, JsonApiCache, ItemProvider, $filter) {
     var provider = {
       create: create
     };
@@ -306,7 +306,7 @@
         .then(function(response) {
           return _parse(response.data);
         }, function(response) {
-          return _parse(response.data);
+          return response.data;
         });
       }
       
@@ -399,6 +399,23 @@
         };
         
         resource.data = _createData(data, schema);
+                
+        angular.forEach(resource.data.relationships, function(relation){
+          ///TODO: Bei m zu n Beziehung relation.data auf Array prüfen
+          if(relation.data.type !== undefined && relation.data.id !== undefined) {
+            var found = $filter('filter')(resource.included, {id: relation.data.id, type: relation.data.type}, true);
+            if (found.length === 0) {
+              resource.included.push({
+                type: relation.data.type,
+                id: relation.data.id,
+                attributes: {
+                  //TODO: wenn benötigt...
+                }
+              });
+            }
+          }
+        })
+        
         return resource;
       }
       
@@ -431,14 +448,16 @@
           
           angular.forEach(schema.relationships, function(relation) {
             data.relationships[relation.name] = {
-              data: {
-                type: relation.schema.type
-              }
+              data:  {}// TODO: Muss für  m zu n Beziehung ein array sein
             };
+            if(angular.isDefined(relation.schema)) {
+              data.relationships[relation.name].data['type'] = relation.schema.type;
+            }
             if(angular.isDefined(item[relation.name]) && angular.isDefined(item[relation.name].id)){
               data.relationships[relation.name].data['id'] = item[relation.name].id(); 
-            }
+            }            
           });
+          
           return data;
         }
         
