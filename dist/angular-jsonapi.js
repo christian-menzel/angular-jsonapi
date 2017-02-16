@@ -297,38 +297,47 @@
           return _parse(resource);
         });
       }
-      
-      function add(data) {
+
+      function add(data, options) {
         var resource = _createResource(data, _schema);
-        console.log('resource');
-        console.log(resource);
+        if (options.meta) {
+          resource.meta = options.meta;
+        }
         return $http.post(_path, resource)
         .then(function(response) {
-          return _parse(response.data);
+          var data = _parse(response.data);
+          if (response.data.meta) {
+            data = angular.extend(data, {
+              meta: function() {
+               return response.data.meta;
+              }
+            });
+          }
+          return data;
         }, function(response) {
           return response.data;
         });
       }
-      
+
       function addRelationships(data) {
         var resource = _createRelationshipResource(data, _schema);
-        
+
         return $http.post(_path, resource)
         .then(function(response) {
           return response;
         })
       }
-      
+
       function remove(id) {
         return $http.delete(_path + '/' + id)
         .then(function(response) {
           return response;
-        });  
+        });
       }
 
       function removeRelationships(data) {
         var resource = _createRelationshipResource(data, _schema);
-        
+
         $http({
           method: 'DELETE',
           url: _path,
@@ -338,20 +347,20 @@
           }
         }).then(function(response) {
           return response;
-        }); 
+        });
       }
-      
+
       /* private */
 
       function _findResource(resourceUri, options) {
         var opt = angular.extend({}, options);
         var params = {};
-        
+
         if (angular.isDefined(opt.include)) {
           params.include = opt.include.join(',');
         }
         if (angular.isDefined(opt.filter)) {
-          angular.forEach(opt.filter, function(item) {        
+          angular.forEach(opt.filter, function(item) {
             params["filter["+item.field+"]"] = item.value;
           })
         }
@@ -391,15 +400,15 @@
         });
         return collection;
       }
-            
-      function _createResource(data, schema) {        
+
+      function _createResource(data, schema) {
         var resource = {
           data: {},
           included: []
         };
-        
+
         resource.data = _createData(data, schema);
-                
+
         angular.forEach(resource.data.relationships, function(relation){
           ///TODO: Bei m zu n Beziehung relation.data auf Array prüfen
           if(relation.data.type !== undefined && relation.data.id !== undefined) {
@@ -415,37 +424,37 @@
             }
           }
         })
-        
+
         return resource;
       }
-      
+
       function _createRelationshipResource(data, schema) {
         var resource = {
           data: [],
           included: []
         };
-        
+
         angular.forEach(data, function(item, index) {
           resource.data[index] = _createData(item, schema);
         });
         return resource;
       }
-      
+
       function _createData(item, schema) {
         var data = {
           type: '',
           attributes: {},
           relationships: {}
         };
-        
+
         if(angular.isDefined(item.id)) {
           data['id'] = item.id();
         };
-        
+
         if(angular.isDefined(schema)) {
           data.type = schema.type;
           data = _createAttributes(data, schema.attributes, item);
-          
+
           angular.forEach(schema.relationships, function(relation) {
             data.relationships[relation.name] = {
               data:  {}// TODO: Muss für  m zu n Beziehung ein array sein
@@ -454,17 +463,17 @@
               data.relationships[relation.name].data['type'] = relation.schema.type;
             }
             if(angular.isDefined(item[relation.name]) && angular.isDefined(item[relation.name].id)){
-              data.relationships[relation.name].data['id'] = item[relation.name].id(); 
-            }            
+              data.relationships[relation.name].data['id'] = item[relation.name].id();
+            }
           });
-          
+
           return data;
         }
-        
+
         data.type = item.type();
         return data;
       }
-      
+
       function _createAttributes(data, attributes, item) {
         angular.forEach(attributes, function(attribute) {
           data.attributes[attribute] = item[attribute];
