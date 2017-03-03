@@ -276,6 +276,7 @@
       var repository = {
         fetch: fetch,
         add: add,
+        patch: patch,
         addRelationships: addRelationships,
         remove: remove,
         removeRelationships: removeRelationships
@@ -300,23 +301,48 @@
 
       function add(data, options) {
         var resource = _createResource(data, _schema);
-        if (options.meta) {
-          resource.meta = options.meta;
+        if (options) {
+          if (options.meta) {
+            resource.meta = options.meta;
+          }
         }
         return $http.post(_path, resource)
-        .then(function(response) {
-          var data = _parse(response.data);
-          if (response.data.meta) {
-            data = angular.extend(data, {
-              meta: function() {
-               return response.data.meta;
-              }
-            });
+          .then(function(response) {
+            var data = _parse(response.data);
+            if (response.data.meta) {
+              data = angular.extend(data, {
+                meta: function() {
+                 return response.data.meta;
+                }
+              });
+            }
+            return data;
+          }, function(response) {
+            return response.data;
+          });
+      }
+
+      function patch(data, options) {
+        var resource = _createResource(data, _schema);
+        if (options) {
+          if (options.meta) {
+            resource.meta = options.meta;
           }
-          return data;
-        }, function(response) {
-          return response.data;
-        });
+        }
+        return $http.patch(_path, resource)
+          .then(function(response) {
+            var data = _parse(response.data);
+            if (response.data.meta) {
+              data = angular.extend(data, {
+                meta: function() {
+                 return response.data.meta;
+                }
+              });
+            }
+            return data;
+          }, function(response) {
+            return response.data;
+          });
       }
 
       function addRelationships(data) {
@@ -361,7 +387,7 @@
         }
         if (angular.isDefined(opt.filter)) {
           angular.forEach(opt.filter, function(item) {
-            params["filter["+item.field+"]"] = item.value;
+            params["filter["+item.field+"]"] = JSON.stringify(item.value);
           })
         }
 
