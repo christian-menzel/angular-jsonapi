@@ -1,9 +1,9 @@
 (function() {
   'use strict';
   angular.module('JsonApi')
-    .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', '$filter', RepositoryProvider]);
+    .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', '$filter', '$q', RepositoryProvider]);
 
-  function RepositoryProvider($http, JsonApiCache, ItemProvider, $filter) {
+  function RepositoryProvider($http, JsonApiCache, ItemProvider, $filter, $q) {
     var provider = {
       create: create
     };
@@ -46,7 +46,8 @@
             resource.meta = options.meta;
           }
         }
-        return $http.post(_path, resource)
+        var deferred = $q.defer();
+        $http.post(_path, resource)
           .then(function(response) {
             var data = _parse(response.data);
             if (response.data.meta) {
@@ -56,10 +57,11 @@
                 }
               });
             }
-            return data;
+            deferred.resolve(data);
           }, function(response) {
-            return response.data;
+            deferred.reject(response.data);
           });
+          return deferred.promise;
       }
 
       function patch(data, options) {
@@ -169,35 +171,16 @@
 
       function _createResource(data, schema) {
         var resource = {
-          data: {},
-          included: []
+          data: {}
         };
 
         resource.data = _createData(data, schema);
-
-        angular.forEach(resource.data.relationships, function(relation){
-          ///TODO: Bei m zu n Beziehung relation.data auf Array prüfen
-          if(relation.data.type !== undefined && relation.data.id !== undefined) {
-            var found = $filter('filter')(resource.included, {id: relation.data.id, type: relation.data.type}, true);
-            if (found.length === 0) {
-              resource.included.push({
-                type: relation.data.type,
-                id: relation.data.id,
-                attributes: {
-                  //TODO: wenn benötigt...
-                }
-              });
-            }
-          }
-        })
-
         return resource;
       }
 
       function _createRelationshipResource(data, schema) {
         var resource = {
-          data: [],
-          included: []
+          data: []
         };
 
         angular.forEach(data, function(item, index) {
