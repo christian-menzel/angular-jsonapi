@@ -331,7 +331,8 @@
             resource.meta = options.meta;
           }
         }
-        return $http.patch(_path, resource)
+        var deferred = $q.defer();
+        $http.patch(_path, resource)
           .then(function(response) {
             var data = _parse(response.data);
             if (response.data.meta) {
@@ -341,10 +342,11 @@
                 }
               });
             }
-            return data;
+            deferred.resolve(data);
           }, function(response) {
-            return response.data;
+            deferred.reject(response.data);
           });
+        return deferred.promise;
       }
 
       function addRelationships(data) {
