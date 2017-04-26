@@ -338,15 +338,15 @@
               deferred.resolve(data);
               return;
             }
-            var data = _parse(response.data);
+            var result = _parse(response.data);
             if (response.data.meta) {
-              data = angular.extend(data, {
+              result = angular.extend(result, {
                 meta: function() {
                  return response.data.meta;
                 }
               });
             }
-            deferred.resolve(data);
+            deferred.resolve(result);
           }, function(response) {
             deferred.reject(response.data);
           });
