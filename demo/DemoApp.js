@@ -6,25 +6,51 @@
   function config($routeProvider) {
     $routeProvider
       .when('/books', {
-        templateUrl: 'partials/books.html',
-        controller: 'BookListController',
-        controllerAs: 'vm'
+        template: '<book-list books="$resolve.books"></book-list>',
+        resolve: {
+            books: function(JsonApi) {
+              return JsonApi.repository('http://localhost:8080/books')
+                .get({
+                  include: ['author', 'stores']
+                });
+            }
+        }
       }).when('/authors', {
-        templateUrl: 'partials/authors.html',
-        controller: 'AuthorListController',
-        controllerAs: 'vm'
+        template: '<author-list authors="$resolve.authors"></author-list>',
+        resolve: {
+          authors: function(JsonApi) {
+            return JsonApi.repository('http://localhost:8080/authors')
+              .get();
+          }
+        }
       }).when('/stores', {
-        templateUrl: 'partials/stores.html',
-        controller: 'StoreListController',
-        controllerAs: 'vm'
+        template: '<store-list stores="$resolve.stores"></store-list>',
+        resolve: {
+          stores: function(JsonApi) {
+            return JsonApi.repository('http://localhost:8080/stores')
+              .get();
+          }
+        }
       }).when('/books/:id', {
-        templateUrl: 'partials/book.html',
-        controller: 'BookController',
-        controllerAs: 'vm'
+        template: '<book book="$resolve.book"></book>',
+        resolve: {
+          book: function(JsonApi, $route) {
+            return JsonApi.repository('http://localhost:8080/books/' + $route.current.params.id)
+              .get({
+                include: ['author', 'stores']
+              });
+          }
+        }
       }).when('/authors/:id', {
-        templateUrl: 'partials/author.html',
-        controller: 'AuthorController',
-        controllerAs: 'vm'
+        template: '<author author="$resolve.author"></author>',
+        resolve: {
+          author: function(JsonApi, $route) {
+            return JsonApi.repository('http://localhost:8080/authors/' + $route.current.params.id)
+              .get({
+                include: ['books']
+              });
+          }
+        }
       }).when('/stores/:id', {
         templateUrl: 'partials/store.html',
         controller: 'StoreController',

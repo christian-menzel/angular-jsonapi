@@ -1,9 +1,9 @@
 (function() {
   'use strict';
   angular.module('JsonApi')
-    .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', '$filter', '$q', RepositoryProvider]);
+    .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', '$q', RepositoryProvider]);
 
-  function RepositoryProvider($http, JsonApiCache, ItemProvider, $filter, $q) {
+  function RepositoryProvider($http, JsonApiCache, ItemProvider, $q) {
     var provider = {
       create: create
     };
@@ -14,11 +14,11 @@
       var _schema = schema;
 
       var repository = {
-        fetch: fetch,
-        add: add,
+        get: get,
+        post: post,
         patch: patch,
         addRelationships: addRelationships,
-        remove: remove,
+        delete: remove,
         removeRelationships: removeRelationships
       };
 
@@ -33,13 +33,13 @@
 
       /* public */
 
-      function fetch(options) {
+      function get(options) {
         return _findResource(_path, options).then(function(resource) {
           return _parse(resource);
         });
       }
 
-      function add(data, options) {
+      function post(data, options) {
         var resource = _createResource(data, _schema);
         if (options) {
           if (options.meta) {
@@ -136,7 +136,7 @@
         if (angular.isDefined(opt.filter)) {
           angular.forEach(opt.filter, function(item) {
             params["filter["+item.field+"]"] = JSON.stringify(item.value);
-          })
+          });
         }
 
         return $http.get(resourceUri, {

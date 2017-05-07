@@ -5,25 +5,26 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body ng-app="DemoApp" ng-controller="MainController as main">
-        <div>
-            <a href ng-click="main.showBookList()">List of Books</a>
-            <a href ng-click="main.showAuthorList()">List of Authors</a>
-            <a href ng-click="main.showStoreList()">List of Stores</a>
-        </div>
-        <div ng-view>
-
-        </div>
+    <body ng-app="DemoApp">
+        <main-app></main-app>
+        <!-- Dependencies -->
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.min.js"></script>
+        
+        <!-- Angular-JsonApi -->
         <script src="../dist/angular-jsonapi.js"></script>
+        
+        <!-- Demo App -->
         <script src="DemoApp.js"></script>
-        <script src="controller/MainController.js"></script>
-        <script src="controller/BookListController.js"></script>
-        <script src="controller/AuthorListController.js"></script>
-        <script src="controller/StoreListController.js"></script>
-        <script src="controller/BookController.js"></script>
-        <script src="controller/AuthorController.js"></script>
+        
+        <!--Components -->
+        <script src="components/Main.js"></script>
+        <script src="components/BookList.js"></script>
+        <script src="components/AuthorList.js"></script>
+        <script src="components/StoreList.js"></script>
+        <script src="components/Book.js"></script>
+        <script src="components/Author.js"></script>
+        
         <script src="controller/StoreController.js"></script>
     </body>
 </html>

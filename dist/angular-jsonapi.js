@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -46,7 +46,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -55,13 +55,13 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-
+/******/
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
@@ -261,9 +261,9 @@
 (function() {
   'use strict';
   angular.module('JsonApi')
-    .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', '$filter', '$q', RepositoryProvider]);
+    .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', '$q', RepositoryProvider]);
 
-  function RepositoryProvider($http, JsonApiCache, ItemProvider, $filter, $q) {
+  function RepositoryProvider($http, JsonApiCache, ItemProvider, $q) {
     var provider = {
       create: create
     };
@@ -274,11 +274,11 @@
       var _schema = schema;
 
       var repository = {
-        fetch: fetch,
-        add: add,
+        get: get,
+        post: post,
         patch: patch,
         addRelationships: addRelationships,
-        remove: remove,
+        delete: remove,
         removeRelationships: removeRelationships
       };
 
@@ -293,13 +293,13 @@
 
       /* public */
 
-      function fetch(options) {
+      function get(options) {
         return _findResource(_path, options).then(function(resource) {
           return _parse(resource);
         });
       }
 
-      function add(data, options) {
+      function post(data, options) {
         var resource = _createResource(data, _schema);
         if (options) {
           if (options.meta) {

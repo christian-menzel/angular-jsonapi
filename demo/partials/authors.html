@@ -1,7 +1,7 @@
-<div ng-show="vm.authors">
+<div ng-show="$ctrl.authors">
     <h2> List of authors</h2>
     <ul>
-        <li ng-repeat="author in vm.authors">
+        <li ng-repeat="author in $ctrl.authors">
             <a href ng-click="main.showAuthor(author)">{{ author.name }}</a>
         </li>
     </ul>

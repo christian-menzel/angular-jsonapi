@@ -1,9 +1,9 @@
-<div ng-show="vm.book">
-    <h2>{{ vm.book.title }}</h2>
-    <p>by <a href ng-click="main.showAuthor(vm.book.author)">{{ vm.book.author.name }}</a></p>
+<div ng-show="$ctrl.book">
+    <h2>{{ $ctrl.book.title }}</h2>
+    <p>by <a href ng-click="main.showAuthor($ctrl.book.author)">{{ $ctrl.book.author.name }}</a></p>
     Available at:
     <ul>
-        <li ng-repeat="store in vm.book.stores">
+        <li ng-repeat="store in $ctrl.book.stores">
             <a href ng-click="main.showStore(store)">{{ store.name }}</a>
         </li>
     </ul>
