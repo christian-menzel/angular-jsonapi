@@ -53,7 +53,7 @@
                 collection.push(JsonApiCache.getItem(itemData.type, itemData.id));
               });
               attributes[attribute] = collection;
-            } else {
+            } else if (relationData !== null) {
               attributes[attribute] = JsonApiCache.getItem(relationData.type, relationData.id);
             }
           }
