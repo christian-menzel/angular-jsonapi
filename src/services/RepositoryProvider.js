@@ -135,7 +135,7 @@
         }
         if (angular.isDefined(opt.filter)) {
           angular.forEach(opt.filter, function(item) {
-            params["filter["+item.field+"]"] = JSON.stringify(item.value);
+            params["filter["+item.field+"]"] = item.value;
           });
         }
 
