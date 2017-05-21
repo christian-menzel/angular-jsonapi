@@ -27,6 +27,7 @@
     "eslint-plugin-standard": "^2.0.1",
     "jasmine-core": "^2.5.2",
     "karma": "^1.4.1",
+    "karma-coverage": "^1.1.1",
     "karma-htmlfile-reporter": "^0.3.5",
     "karma-jasmine": "^1.1.0",
     "karma-webdriver-launcher": "^1.0.5",
