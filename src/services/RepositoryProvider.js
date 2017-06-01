@@ -211,14 +211,29 @@
           data = _createAttributes(data, schema.attributes, item);
 
           angular.forEach(schema.relationships, function(relation) {
-            data.relationships[relation.name] = {
-              data:  {}// TODO: Muss für  m zu n Beziehung ein array sein
-            };
-            if(angular.isDefined(relation.schema)) {
-              data.relationships[relation.name].data['type'] = relation.schema.type;
-            }
-            if(angular.isDefined(item[relation.name]) && angular.isDefined(item[relation.name].id)){
-              data.relationships[relation.name].data['id'] = item[relation.name].id();
+            if(angular.isDefined(relation.schema) && angular.isDefined(item[relation.name])) {
+              if (angular.isArray(item[relation.name])) {
+                data.relationships[relation.name] = {
+                  data:  []
+                };
+                angular.forEach(item[relation.name], function(singleRelation) {
+                  if(angular.isDefined(singleRelation.id)){
+                    data.relationships[relation.name].data.push({
+                      id: item[relation.name].id(),
+                      type: relation.schema.type
+                    });
+                  }
+                });
+              } else {
+                if (angular.isDefined(item[relation.name].id)) {
+                  data.relationships[relation.name] = {
+                    data:  {
+                      id: item[relation.name].id(),
+                      type: relation.schema.type
+                    }
+                  };
+                }
+              }
             }
           });
 
