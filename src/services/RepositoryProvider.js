@@ -219,7 +219,7 @@
                 angular.forEach(item[relation.name], function(singleRelation) {
                   if(angular.isDefined(singleRelation.id)){
                     data.relationships[relation.name].data.push({
-                      id: item[relation.name].id(),
+                      id: singleRelation.id(),
                       type: relation.schema.type
                     });
                   }

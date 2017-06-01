@@ -135,9 +135,13 @@
                 collection.push(JsonApiCache.getItem(itemData.type, itemData.id));
               });
               attributes[attribute] = collection;
+              return;
             } else if (relationData !== null) {
               attributes[attribute] = JsonApiCache.getItem(relationData.type, relationData.id);
+              return;
             }
+            attributes[attribute] = null;
+            return;
           }
         });
         return attributes;
@@ -207,9 +211,6 @@
     }
 
     function getItem(type, id) {
-      if (angular.isUndefined(_items)) {
-        _items = {};
-      }
       if (angular.isUndefined(_items[type])) {
         _items[type] = {};
       }
@@ -220,9 +221,6 @@
     }
 
     function setResponsibility(item, repository) {
-      if (angular.isUndefined(_responsibilities)) {
-        _responsibilities = {};
-      }
       if (angular.isUndefined(_responsibilities[item.type()])) {
         _responsibilities[item.type()] = {};
       }
@@ -238,9 +236,6 @@
       }
       if (!angular.isFunction(item.type)) {
         throw new Error('Missing required Method', 'Required Method item.type() is missing.');
-      }
-      if (angular.isUndefined(_responsibilities)) {
-        return null;
       }
       if (angular.isUndefined(_responsibilities[item.type()])) {
         return null;
@@ -479,7 +474,7 @@
                 angular.forEach(item[relation.name], function(singleRelation) {
                   if(angular.isDefined(singleRelation.id)){
                     data.relationships[relation.name].data.push({
-                      id: item[relation.name].id(),
+                      id: singleRelation.id(),
                       type: relation.schema.type
                     });
                   }
