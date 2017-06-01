@@ -24,9 +24,6 @@
     }
 
     function getItem(type, id) {
-      if (angular.isUndefined(_items)) {
-        _items = {};
-      }
       if (angular.isUndefined(_items[type])) {
         _items[type] = {};
       }
@@ -37,9 +34,6 @@
     }
 
     function setResponsibility(item, repository) {
-      if (angular.isUndefined(_responsibilities)) {
-        _responsibilities = {};
-      }
       if (angular.isUndefined(_responsibilities[item.type()])) {
         _responsibilities[item.type()] = {};
       }
@@ -55,9 +49,6 @@
       }
       if (!angular.isFunction(item.type)) {
         throw new Error('Missing required Method', 'Required Method item.type() is missing.');
-      }
-      if (angular.isUndefined(_responsibilities)) {
-        return null;
       }
       if (angular.isUndefined(_responsibilities[item.type()])) {
         return null;

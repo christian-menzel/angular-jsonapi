@@ -49,8 +49,20 @@
           self: 'http://localhost/books/1'
         }
       };
+      var mockResource2 = {
+        id: '2',
+        type: 'books',
+        attributes: {
+          title: 'The Hobbit'
+        },
+        links: {
+          self: 'http://localhost/books/1'
+        }
+      };
       var mockItem = mockItemProvider.create(1, 'books');
+      var mockItem2 = mockItemProvider.create(2, 'books');
       JsonApiCache.setResponsibility(mockItem, mockResource);
+      JsonApiCache.setResponsibility(mockItem2, mockResource2);
       expect(JsonApiCache.getResponsibility(mockItem))
         .toEqual(mockResource);
     });

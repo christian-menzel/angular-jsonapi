@@ -99,5 +99,30 @@
       expect(item.stores[0].name).toEqual('Amazon Books');
       expect(item.stores[1].name).toEqual('Barnes & Noble');
     });
+    
+    it('should not result in an error if relationships object does not contain a data property', function() {
+      var item = ItemProvider.create({
+        id: '1',
+        type: 'books',
+        relationships: {
+          stores: {
+          }
+        }
+      });
+      expect(item.stores).toBeUndefined();
+    });
+
+    it('should return a null reference', function() {
+      var item = ItemProvider.create({
+        id: '1',
+        type: 'books',
+        relationships: {
+          stores: {
+              data: null
+          }
+        }
+      });
+      expect(item.stores).toBe(null);
+    });
   });
 }());

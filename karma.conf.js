@@ -22,13 +22,20 @@ module.exports = function(config) {
     ],
     exclude: [
     ],
-    reporters: ['progress', 'html'],
+    reporters: ['progress', 'html', 'coverage'],
+    preprocessors: {
+      'src/services/*.js': ['coverage']
+    },
+    coverageReporter: {
+      type : 'html',
+      dir : 'reports/karma/coverage'
+    },
     htmlReporter: {
       outputFile: 'reports/karma/report.html',
 
       // Optional
-      pageTitle: 'Frontend Unit Tests',
-      subPageTitle: 'Dev 2017',
+      pageTitle: 'Unit Tests',
+      subPageTitle: 'angular-jsonapi',
       groupSuites: true,
       useCompactStyle: true
     },
