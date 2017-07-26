@@ -25,7 +25,14 @@
 
     function getItem(type, id) {
       if (angular.isUndefined(_items[type])) {
-        _items[type] = {};
+        _items[type] = {
+          id: function() {
+            return id;
+          },
+          type: function() {
+            return type;
+          }
+        };
       }
       if (angular.isUndefined(_items[type][id])) {
         _items[type][id] = {};
