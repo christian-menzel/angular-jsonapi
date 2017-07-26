@@ -25,7 +25,10 @@
 
     function getItem(type, id) {
       if (angular.isUndefined(_items[type])) {
-        _items[type] = {
+        _items[type] = {};
+      }
+      if (angular.isUndefined(_items[type][id])) {
+        _items[type][id] = {
           id: function() {
             return id;
           },
@@ -33,9 +36,6 @@
             return type;
           }
         };
-      }
-      if (angular.isUndefined(_items[type][id])) {
-        _items[type][id] = {};
       }
       return _items[type][id];
     }
