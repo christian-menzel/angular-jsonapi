@@ -59,7 +59,7 @@
             }
             deferred.resolve(data);
           }, function(response) {
-            deferred.reject(response.errors);
+            deferred.reject(response.data);
           });
           return deferred.promise;
       }
