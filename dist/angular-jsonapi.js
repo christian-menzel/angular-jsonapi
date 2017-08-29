@@ -321,7 +321,7 @@
             }
             deferred.resolve(data);
           }, function(response) {
-            deferred.reject(response.data);
+            deferred.reject(response.errors);
           });
           return deferred.promise;
       }
@@ -361,7 +361,7 @@
         return $http.post(_path, resource)
         .then(function(response) {
           return response;
-        })
+        });
       }
 
       function remove(id) {
