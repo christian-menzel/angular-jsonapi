@@ -311,6 +311,10 @@
         var deferred = $q.defer();
         $http.post(_path, resource)
           .then(function(response) {
+            if (response.status === 204) {
+              deferred.resolve(data);
+              return;
+            }
             var data = _parse(response.data);
             if (response.data.meta) {
               data = angular.extend(data, {
