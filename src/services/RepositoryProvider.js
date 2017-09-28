@@ -212,19 +212,23 @@
 
           angular.forEach(schema.relationships, function(relation) {
             if(angular.isDefined(relation.schema) && angular.isDefined(item[relation.name])) {
+              if(item[relation.name] === null) {
+                return;
+              }
               if (angular.isArray(item[relation.name])) {
-                data.relationships[relation.name] = {
-                  data:  []
-                };
-                angular.forEach(item[relation.name], function(singleRelation) {
-                  if(angular.isDefined(singleRelation.id)){
-                    data.relationships[relation.name].data.push({
-                      id: singleRelation.id(),
-                      type: relation.schema.type
-                    });
-                  }
-                });
-              } else {
+                  data.relationships[relation.name] = {
+                    data:  []
+                  };
+                  angular.forEach(item[relation.name], function(singleRelation) {
+                    if(angular.isDefined(singleRelation.id)){
+                      data.relationships[relation.name].data.push({
+                        id: singleRelation.id(),
+                        type: relation.schema.type
+                      });
+                    }
+                  });
+                  return;
+                }
                 if (angular.isDefined(item[relation.name].id)) {
                   data.relationships[relation.name] = {
                     data:  {
@@ -233,7 +237,6 @@
                     }
                   };
                 }
-              }
             }
           });
 
