@@ -298,10 +298,14 @@
       function get(options) {
         return _findResource(_path, options).then(function(resource) {
           var data = _parse(resource);
-          if (resource.meta) {
-            data = angular.extend(data, {
-              meta: function() {
-               return resource.meta;
+          if (angular.isArray(resource.data)) {
+            angular.forEach(resource.data, function(value, index) {
+              if (value.meta) {
+                data[index] = angular.extend(data[index], {
+                  meta: function() {
+                   return value.meta;
+                  }
+                });
               }
             });
           }
