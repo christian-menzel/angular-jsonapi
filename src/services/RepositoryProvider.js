@@ -36,10 +36,10 @@
       function get(options) {
         return _findResource(_path, options).then(function(resource) {
           var data = _parse(resource);
-          if (resource.data.meta) {
+          if (resource.meta) {
             data = angular.extend(data, {
               meta: function() {
-               return resource.data.meta;
+               return resource.meta;
               }
             });
           }
