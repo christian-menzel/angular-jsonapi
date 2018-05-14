@@ -297,7 +297,7 @@
 
       function get(options) {
         return _findResource(_path, options).then(function(resource) {
-          var data = _parse(resource.data);
+          var data = _parse(resource);
           if (resource.data.meta) {
             data = angular.extend(data, {
               meta: function() {
