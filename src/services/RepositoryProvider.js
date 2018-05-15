@@ -46,6 +46,12 @@
                 });
               }
             });
+          } else if (resource.data.meta) {
+            data.meta = angular.extend(data, {
+              meta: function() {
+               return resource.data.meta;
+              }
+            });
           }
           return data;
         });
