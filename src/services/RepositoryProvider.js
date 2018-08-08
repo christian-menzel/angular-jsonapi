@@ -33,8 +33,9 @@
 
       /* public */
 
-      function get(options) {
-        return _findResource(_path, options).then(function(resource) {
+      function get(options, recursive) {
+        recursive = recursive || false;
+        return _findResource(_path, options, recursive).then(function(resource) {
           var data = _parse(resource);
           if (angular.isArray(resource.data)) {
             angular.forEach(resource.data, function(value, index) {
@@ -148,7 +149,7 @@
 
       /* private */
 
-      function _findResource(resourceUri, options) {
+      function _findResource(resourceUri, options, recursive) {
         var opt = angular.extend({}, options);
         var params = {};
 
@@ -164,6 +165,14 @@
         return $http.get(resourceUri, {
           params: params
         }).then(function(response) {
+          if (recursive === true && response.data.links.next !== null) {
+            resourceUri = response.data.links.next;
+            return _findResource(resourceUri, options, recursive).then(function(newData) {
+              response.data.data = response.data.data.concat(newData.data);
+              response.data.included = response.data.included.concat(newData.included);
+              return response.data;
+            });
+          }
           return response.data;
         });
       }
