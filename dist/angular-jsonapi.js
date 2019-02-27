@@ -419,11 +419,20 @@
           params.include = opt.include.join(',');
         }
         if (angular.isDefined(opt.filter)) {
+          var ops = 0;
           angular.forEach(opt.filter, function(item) {
-            params["filter["+item.field+"]"] = item.value;
+            if (item.op) {
+              angular.forEach(item.op, function(values, field) {
+                params["filter[op][" + ops + "][" + field + "][]"] = values;
+              });
+              ops++;
+            } else {
+              params["filter["+item.field+"]"] = item.value;
+            }
           });
         }
 
+        console.log('params', params);
         return $http.get(resourceUri, {
           params: params
         }).then(function(response) {
