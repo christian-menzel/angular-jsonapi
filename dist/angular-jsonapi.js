@@ -432,7 +432,6 @@
           });
         }
 
-        console.log('params', params);
         return $http.get(resourceUri, {
           params: params
         }).then(function(response) {
