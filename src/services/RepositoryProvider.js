@@ -169,6 +169,10 @@
             }
           });
         }
+        if (angular.isDefined(opt.offset) && angular.isDefined(opt.limit)) {
+          params["page[offset]"] = opt.offset;
+          params["page[limit]"] = opt.limit;
+        }
 
         return $http.get(resourceUri, {
           params: params
