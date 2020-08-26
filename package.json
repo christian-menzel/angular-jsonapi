@@ -4,7 +4,8 @@
   "description": "json:api wrapper for the angular framework",
   "main": "dist/angular-jsonapi.min.js",
   "scripts": {
-    "test": "karma start --singleRun"
+    "test": "karma start --singleRun",
+    "build": "webpack --config webpack.config.js"
   },
   "repository": {
     "type": "git",

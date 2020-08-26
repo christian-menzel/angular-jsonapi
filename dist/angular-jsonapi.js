@@ -260,7 +260,7 @@
 /* 4 */
 /***/ (function(module, exports) {
 
-(function() {
+(function () {
   'use strict';
   angular.module('JsonApi')
     .factory('RepositoryProvider', ['$http', 'JsonApiCache', 'ItemProvider', '$q', RepositoryProvider]);
@@ -297,22 +297,22 @@
 
       function get(options, recursive) {
         recursive = recursive || false;
-        return _findResource(_path, options, recursive).then(function(resource) {
+        return _findResource(_path, options, recursive).then(function (resource) {
           var data = _parse(resource);
           if (angular.isArray(resource.data)) {
-            angular.forEach(resource.data, function(value, index) {
+            angular.forEach(resource.data, function (value, index) {
               if (value.meta) {
                 data[index] = angular.extend(data[index], {
-                  meta: function() {
-                   return value.meta;
+                  meta: function () {
+                    return value.meta;
                   }
                 });
               }
             });
           } else if (resource.data.meta) {
             data = angular.extend(data, {
-              meta: function() {
-               return resource.data.meta;
+              meta: function () {
+                return resource.data.meta;
               }
             });
           }
@@ -329,7 +329,7 @@
         }
         var deferred = $q.defer();
         $http.post(_path, resource)
-          .then(function(response) {
+          .then(function (response) {
             if (response.status === 204) {
               deferred.resolve(data);
               return;
@@ -337,16 +337,16 @@
             var data = _parse(response.data);
             if (response.data.meta) {
               data = angular.extend(data, {
-                meta: function() {
-                 return response.data.meta;
+                meta: function () {
+                  return response.data.meta;
                 }
               });
             }
             deferred.resolve(data);
-          }, function(response) {
+          }, function (response) {
             deferred.reject(response.data);
           });
-          return deferred.promise;
+        return deferred.promise;
       }
 
       function patch(data, options) {
@@ -358,7 +358,7 @@
         }
         var deferred = $q.defer();
         $http.patch(_path, resource)
-          .then(function(response) {
+          .then(function (response) {
             if (response.status === 204) {
               deferred.resolve(data);
               return;
@@ -366,13 +366,13 @@
             var result = _parse(response.data);
             if (response.data.meta) {
               result = angular.extend(result, {
-                meta: function() {
-                 return response.data.meta;
+                meta: function () {
+                  return response.data.meta;
                 }
               });
             }
             deferred.resolve(result);
-          }, function(response) {
+          }, function (response) {
             deferred.reject(response.data);
           });
         return deferred.promise;
@@ -382,16 +382,16 @@
         var resource = _createRelationshipResource(data, _schema);
 
         return $http.post(_path, resource)
-        .then(function(response) {
-          return response;
-        });
+          .then(function (response) {
+            return response;
+          });
       }
 
       function remove(id) {
         return $http.delete(_path + '/' + id)
-        .then(function(response) {
-          return response;
-        });
+          .then(function (response) {
+            return response;
+          });
       }
 
       function removeRelationships(data) {
@@ -404,7 +404,7 @@
           headers: {
             'Content-type': 'application/json;charset=utf-8'
           }
-        }).then(function(response) {
+        }).then(function (response) {
           return response;
         });
       }
@@ -420,16 +420,19 @@
         }
         if (angular.isDefined(opt.filter)) {
           var ops = 0;
-          angular.forEach(opt.filter, function(item) {
+          angular.forEach(opt.filter, function (item) {
             if (item.op) {
-              angular.forEach(item.op, function(values, field) {
+              angular.forEach(item.op, function (values, field) {
                 params["filter[op][" + ops + "][" + field + "][]"] = values;
               });
               ops++;
             } else {
-              params["filter["+item.field+"]"] = item.value;
+              params["filter[" + item.field + "]"] = item.value;
             }
           });
+        }
+        if (angular.isDefined(opt.fields)) {
+          _setSparseFields(params, opt.fields);
         }
         if (angular.isDefined(opt.offset) && angular.isDefined(opt.limit)) {
           params["page[offset]"] = opt.offset;
@@ -438,16 +441,22 @@
 
         return $http.get(resourceUri, {
           params: params
-        }).then(function(response) {
+        }).then(function (response) {
           if (recursive === true && response.data.links.next !== null) {
             resourceUri = response.data.links.next;
-            return _findResource(resourceUri, options, recursive).then(function(newData) {
+            return _findResource(resourceUri, options, recursive).then(function (newData) {
               response.data.data = response.data.data.concat(newData.data);
               response.data.included = response.data.included.concat(newData.included);
               return response.data;
             });
           }
           return response.data;
+        });
+      }
+
+      function _setSparseFields(params, fields) {
+        angular.forEach(Object.keys(fields), function (key) {
+          params["fields[" + key + "]"] = fields[key].join(',');
         });
       }
 
@@ -460,7 +469,7 @@
       }
 
       function _parseIncluded(resources) {
-        angular.forEach(resources, function(resource) {
+        angular.forEach(resources, function (resource) {
           _parseItem(resource);
         });
       }
@@ -474,7 +483,7 @@
 
       function _parseCollection(resources) {
         var collection = [];
-        angular.forEach(resources, function(resource) {
+        angular.forEach(resources, function (resource) {
           collection.push(_parseItem(resource));
         });
         return collection;
@@ -494,7 +503,7 @@
           data: []
         };
 
-        angular.forEach(data, function(item, index) {
+        angular.forEach(data, function (item, index) {
           resource.data[index] = _createData(item, schema);
         });
         return resource;
@@ -507,41 +516,41 @@
           relationships: {}
         };
 
-        if(angular.isDefined(item.id)) {
+        if (angular.isDefined(item.id)) {
           data['id'] = item.id();
         };
 
-        if(angular.isDefined(schema)) {
+        if (angular.isDefined(schema)) {
           data.type = schema.type;
           data = _createAttributes(data, schema.attributes, item);
 
-          angular.forEach(schema.relationships, function(relation) {
-            if(angular.isDefined(relation.schema) && angular.isDefined(item[relation.name])) {
-              if(item[relation.name] === null) {
+          angular.forEach(schema.relationships, function (relation) {
+            if (angular.isDefined(relation.schema) && angular.isDefined(item[relation.name])) {
+              if (item[relation.name] === null) {
                 return;
               }
               if (angular.isArray(item[relation.name])) {
-                  data.relationships[relation.name] = {
-                    data:  []
-                  };
-                  angular.forEach(item[relation.name], function(singleRelation) {
-                    if(angular.isDefined(singleRelation.id)){
-                      data.relationships[relation.name].data.push({
-                        id: singleRelation.id(),
-                        type: relation.schema.type
-                      });
-                    }
-                  });
-                  return;
-                }
-                if (angular.isDefined(item[relation.name].id)) {
-                  data.relationships[relation.name] = {
-                    data:  {
-                      id: item[relation.name].id(),
+                data.relationships[relation.name] = {
+                  data: []
+                };
+                angular.forEach(item[relation.name], function (singleRelation) {
+                  if (angular.isDefined(singleRelation.id)) {
+                    data.relationships[relation.name].data.push({
+                      id: singleRelation.id(),
                       type: relation.schema.type
-                    }
-                  };
-                }
+                    });
+                  }
+                });
+                return;
+              }
+              if (angular.isDefined(item[relation.name].id)) {
+                data.relationships[relation.name] = {
+                  data: {
+                    id: item[relation.name].id(),
+                    type: relation.schema.type
+                  }
+                };
+              }
             }
           });
 
@@ -553,7 +562,7 @@
       }
 
       function _createAttributes(data, attributes, item) {
-        angular.forEach(attributes, function(attribute) {
+        angular.forEach(attributes, function (attribute) {
           data.attributes[attribute] = item[attribute];
         });
         return data;
